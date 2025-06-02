@@ -4,7 +4,7 @@ const fs = require('fs/promises');
 const cors = require('cors'); // Import the cors middleware
 
 const app = express();
-const port = 3007;
+const port = process.env.PORT || 3007;;
 const dataFilePath = 'users.json';
 
 app.use(bodyParser.json());
