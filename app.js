@@ -9,6 +9,6 @@ app.use(express.json());
 setupSwagger(app);
 connectDB();
 
-app.use('/cart', cartRoutes);
+app.use('/api/cart', cartRoutes);
 
 app.listen(port, () => console.log(`Server running on port ${port}`));
