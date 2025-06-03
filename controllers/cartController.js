@@ -5,7 +5,11 @@ exports.saveCart = async (req, res) => {
     try {
       const existingCart = await Cart.findOne({ customerId });
       if (existingCart) {
-        return res.status(400).json({ message: 'Cart with this customerId already exists' });
+        existingCart.email = email;
+        existingCart.lineItems = lineItems;
+        existingCart.addedDate = new Date();
+        await existingCart.save();
+        return res.status(200).json({ message: 'Cart updated' });
       }
   
       const cart = new Cart({ customerId, email, lineItems, addedDate: new Date() });
@@ -15,7 +19,7 @@ exports.saveCart = async (req, res) => {
       res.status(500).json({ error: err.message });
     }
   };
-  
+
 exports.getCartByEmail = async (req, res) => {
   try {
     const cart = await Cart.findOne({ email: req.params.email });
