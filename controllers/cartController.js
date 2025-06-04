@@ -8,13 +8,20 @@ exports.saveCart = async (req, res) => {
         existingCart.email = email;
         existingCart.lineItems = lineItems;
         existingCart.addedDate = new Date();
+        if(!existingCart.lineItems.length){
+            const result = await Cart.deleteOne({ email: email });
+            if (result.deletedCount === 0) {
+              return res.status(404).json({ message: 'Cart not found', cart:{ addedDate: new Date() } });
+            }
+            return res.status(200).json({ message: 'Cart deleted', cart:{ addedDate: new Date() } });
+        }
         await existingCart.save();
-        return res.status(200).json({ message: 'Cart updated' });
+        return res.status(200).json({ message: 'Cart updated', cart: existingCart });
       }
   
       const cart = new Cart({ customerId, email, lineItems, addedDate: new Date() });
       await cart.save();
-      res.status(200).json({ message: 'Cart saved' });
+      res.status(200).json({ message: 'Cart saved', cart: cart });
     } catch (err) {
       res.status(500).json({ error: err.message });
     }
@@ -23,7 +30,7 @@ exports.saveCart = async (req, res) => {
 exports.getCartByEmail = async (req, res) => {
   try {
     const cart = await Cart.findOne({ email: req.params.email });
-    res.status(200).json(cart || {});
+    res.status(200).json({message:'cart fetched',cart: cart || {}});
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
