@@ -25,7 +25,7 @@ exports.saveCart = async (req, res) => {
     } catch (err) {
       res.status(500).json({ error: err.message });
     }
-  };
+  }; 
 
 exports.getCartByEmail = async (req, res) => {
   try {
