@@ -4,28 +4,39 @@ exports.saveCart = async (req, res) => {
     const { customerId, email, lineItems } = req.body;
     try {
       const existingCart = await Cart.findOne({ customerId });
+      // If cart exists
       if (existingCart) {
+        if (!lineItems.length) {
+          const result = await Cart.deleteOne({ customerId });
+          if (result.deletedCount === 0) {
+            return res.status(404).json({
+              message: 'Cart not found',
+              cart: { addedDate: new Date(), email: '', lineItems: [] }
+            });
+          }
+          return res.status(200).json({
+            message: 'Cart deleted',
+            cart: { addedDate: new Date(), email, lineItems: [] }
+          });
+        }
         existingCart.email = email;
         existingCart.lineItems = lineItems;
         existingCart.addedDate = new Date();
-        if(!existingCart.lineItems.length){
-            const result = await Cart.deleteOne({ email: email });
-            if (result.deletedCount === 0) {
-              return res.status(404).json({ message: 'Cart not found', cart:{ addedDate: new Date() } });
-            }
-            return res.status(200).json({ message: 'Cart deleted', cart:{ addedDate: new Date() } });
-        }
         await existingCart.save();
         return res.status(200).json({ message: 'Cart updated', cart: existingCart });
       }
-  
+      // If no cart exists and lineItems is empty, do not create a new cart
+      if (!lineItems.length) {
+        return res.status(400).json({ message: 'Cart is empty, nothing to save' });
+      }
+      // Create new cart
       const cart = new Cart({ customerId, email, lineItems, addedDate: new Date() });
       await cart.save();
-      res.status(200).json({ message: 'Cart saved', cart: cart });
+      return res.status(200).json({ message: 'Cart saved', cart });
     } catch (err) {
-      res.status(500).json({ error: err.message });
+      return res.status(500).json({ error: err.message });
     }
-  }; 
+  };
 
 exports.getCartByEmail = async (req, res) => {
   try {
