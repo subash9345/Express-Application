@@ -41,7 +41,7 @@ exports.saveCart = async (req, res) => {
 exports.getCartByEmail = async (req, res) => {
   try {
     const cart = await Cart.findOne({ email: req.params.email });
-    res.status(200).json({message:'cart fetched',cart: cart || {}});
+    res.status(200).json({message:'cart fetched',cart: cart || { addedDate: new Date(), email: '', lineItems: [] }});
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
@@ -50,7 +50,7 @@ exports.getCartByEmail = async (req, res) => {
 exports.getCartByCustomerId = async (req, res) => {
   try {
     const cart = await Cart.findOne({ customerId: req.params.customerId });
-    res.status(200).json(cart || {});
+    res.status(200).json({message:'cart fetched',cart: cart || { addedDate: new Date(), email: '', lineItems: [] }});
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
@@ -60,7 +60,7 @@ exports.deleteCartByCustomerId = async (req, res) => {
   try {
     const result = await Cart.deleteOne({ customerId: req.params.customerId });
     if (result.deletedCount === 0) {
-      return res.status(404).json({ message: 'Cart not found' });
+      return res.status(404).json({ message: 'Cart not found' ,cart:{ addedDate: new Date(), email: '', lineItems: [] }});
     }
     res.status(200).json({ message: 'Cart deleted' });
   } catch (err) {
