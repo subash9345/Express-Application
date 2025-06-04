@@ -1,5 +1,5 @@
 const Cart = require('../models/Cart');
-
+const path = require("path");
 exports.saveCart = async (req, res) => {
     const { customerId, email, lineItems } = req.body;
     try {
@@ -65,3 +65,13 @@ exports.getAllCarts = async (req, res) => {
     res.status(500).json({ error: err.message });
   }
 };
+
+
+exports.getPage = async (req,res) =>{
+    try{
+        res.sendFile(path.join(__dirname, "../view/index.html"));
+    }catch{
+        res.status(500).json({ error: err.message });
+    }
+}
+

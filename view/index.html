@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Sync Cart Animation</title>
+<link
+  rel="stylesheet"
+  href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+/>
+<style>
+  body {
+    margin: 0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(135deg, #2a2a72, #009ffd);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 3rem 2rem;
+    min-height: 100vh;
+    color: #f0f4f8;
+    overflow-x: hidden;
+  }
+  h1 {
+    color: #f8f9fa;
+    font-size: 3rem;
+    margin-bottom: 0.5rem;
+    text-align: center;
+    text-shadow: 0 2px 6px rgba(0,0,0,0.6);
+  }
+  p {
+    color: #d0e6ff;
+    font-size: 1.3rem;
+    margin-bottom: 3rem;
+    text-align: center;
+    max-width: 600px;
+    text-shadow: 0 1px 4px rgba(0,0,0,0.4);
+  }
+  .devices-container {
+    position: relative;
+    width: 600px;
+    max-width: 95vw;
+    height: 320px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .pc-icon {
+    font-size: 150px;
+    width:120px;
+    color: #ffe066;
+    filter: drop-shadow(0 0 6px #ffba08);
+  }
+  .mobile-icon {
+    font-size: 130px;
+    width:120px;
+    color: #ffd166;
+    filter: drop-shadow(0 0 6px #f4a261);
+  }
+
+  .cart-icon {
+    width: 44px;
+    height: 44px;
+    position: absolute;
+    top: 0;
+    left: 0;
+    pointer-events: none;
+    font-size: 2.5rem;
+    color: #f94144;
+    filter: drop-shadow(0 0 4px #d90429);
+  }
+
+  .path-container {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 600px;
+    height: 150px;
+    transform: translate(-50%, -50%);
+    pointer-events: none;
+  }
+  #svgg path {
+    stroke: #ffd166;
+    stroke-width: 3;
+    stroke-dasharray: 10 8;
+  }
+</style>
+</head>
+<body>
+
+<h1>Sync Your Cart Seamlessly</h1>
+<p>Realtime syncing across your devices — continue shopping from desktop to phone without missing a thing.</p>
+
+<div class="devices-container" id="devices-container">
+  <!-- <i class="fa-solid fa-desktop pc-icon" aria-label="PC device"></i> -->
+  <svg class="fa-solid fa-desktop pc-icon" fill="#030303" viewBox="0 0 24 24" id="monitor" data-name="Flat Color" xmlns="http://www.w3.org/2000/svg" class="icon flat-color" stroke="#030303"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"><path id="secondary" d="M17,19.76l-1-4A1,1,0,0,0,15,15H9a1,1,0,0,0-1,.76l-1,4a1,1,0,0,0,.18.86A1,1,0,0,0,8,21h8a1,1,0,0,0,.79-.38A1,1,0,0,0,17,19.76Z" style="fill: #ffe066;"></path><path id="primary" d="M19,20a1,1,0,0,1-1,1H6a1,1,0,0,1,0-2H18A1,1,0,0,1,19,20ZM20,3H4A2,2,0,0,0,2,5V15a2,2,0,0,0,2,2H20a2,2,0,0,0,2-2V5A2,2,0,0,0,20,3Z" style="fill: #ffe066;"></path></g></svg>
+  <div class="path-container" aria-hidden="true">
+    <svg width="600" id="svgg" height="150" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
+      <path id="cartPath" fill="none" d="
+        M 108 80
+        Q 273 20 508 80
+      "/>
+    </svg>
+    <div class="cart-icon" id="cartIcon" aria-label="Shopping cart">🛒</div>
+  </div>
+
+  <svg class="fa-solid fa-mobile-screen-button mobile-icon"fill="#ffe066" viewBox="-7.2 -7.2 86.40 86.40" id="Layer_1" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" stroke="#ffe066" stroke-width="0.00072" transform="rotate(0)"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round" stroke="#030303" stroke-width="1.2959999999999998"><title>mobile</title><path d="M49.75,0H22.25a4,4,0,0,0-4.16,3.78V52.22A4,4,0,0,0,22.25,56h27.5a4,4,0,0,0,4.16-3.78V3.78A4,4,0,0,0,49.75,0ZM31.6,2.73h8.8a.48.48,0,0,1,.5.46.47.47,0,0,1-.5.45H31.6a.47.47,0,0,1-.5-.45A.48.48,0,0,1,31.6,2.73ZM36,54.11a1.9,1.9,0,1,1,2.08-1.89A2,2,0,0,1,36,54.11ZM51,49H21V6H51Z"></path></g><g id="SVGRepo_iconCarrier"><title>mobile</title><path d="M49.75,0H22.25a4,4,0,0,0-4.16,3.78V52.22A4,4,0,0,0,22.25,56h27.5a4,4,0,0,0,4.16-3.78V3.78A4,4,0,0,0,49.75,0ZM31.6,2.73h8.8a.48.48,0,0,1,.5.46.47.47,0,0,1-.5.45H31.6a.47.47,0,0,1-.5-.45A.48.48,0,0,1,31.6,2.73ZM36,54.11a1.9,1.9,0,1,1,2.08-1.89A2,2,0,0,1,36,54.11ZM51,49H21V6H51Z"></path></g></svg>
+</div>
+
+<script>
+  const cartIcon = document.getElementById('cartIcon');
+  const path = document.getElementById('cartPath');
+  const pathLength = path.getTotalLength();
+  const duration = 4000;
+
+  let startTime = null;
+  let direction = 1;
+
+  function animate(timestamp) {
+    if (!startTime) startTime = timestamp;
+    let elapsed = timestamp - startTime;
+
+    let progress = (elapsed % duration) / duration;
+    if (direction === -1) progress = 1 - progress;
+
+    let point = path.getPointAtLength(progress * pathLength);
+
+    cartIcon.style.left = (point.x - cartIcon.offsetWidth / 2) + 'px';
+    cartIcon.style.top = (point.y - cartIcon.offsetHeight / 2) + 'px';
+
+    if (elapsed >= duration) {
+      direction *= -1;
+      startTime = timestamp;
+    }
+
+    requestAnimationFrame(animate);
+  }
+
+  requestAnimationFrame(animate);
+</script>
+
+</body>
+</html>
