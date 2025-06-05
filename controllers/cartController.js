@@ -1,24 +1,23 @@
 const Cart = require('../models/Cart');
 const path = require("path");
+
+// Save or update cart
 exports.saveCart = async (req, res) => {
     const { customerId, email, lineItems } = req.body;
     try {
-      const existingCart = await Cart.findOne({ customerId });
+      const existingCart = await Cart.findOne({ email });
       // If cart exists
       if (existingCart) {
         if (!lineItems.length) {
-          const result = await Cart.deleteOne({ customerId });
-          if (result.deletedCount === 0) {
-            return res.status(404).json({
-              message: 'Cart not found',
-              cart: { addedDate: new Date(), email: '', lineItems: [] }
-            });
-          }
-          return res.status(200).json({
-            message: 'Cart deleted',
-            cart: { addedDate: new Date(), email, lineItems: [] }
+          // If cart is now empty, delete it
+          const result = await Cart.deleteOne({ email });
+          const status = result.deletedCount ? 200 : 400; 
+          return res.status(status).json({
+            message: result.deletedCount ? 'Cart deleted' : 'Cart not found',
+            cart: getEmptyCart(email)
           });
         }
+        // Update existing cart
         existingCart.email = email;
         existingCart.lineItems = lineItems;
         existingCart.addedDate = new Date();
@@ -38,6 +37,7 @@ exports.saveCart = async (req, res) => {
     }
   };
 
+// Get cart by email
 exports.getCartByEmail = async (req, res) => {
   try {
     const cart = await Cart.findOne({ email: req.params.email });
@@ -47,6 +47,7 @@ exports.getCartByEmail = async (req, res) => {
   }
 };
 
+// Get cart by customer ID
 exports.getCartByCustomerId = async (req, res) => {
   try {
     const cart = await Cart.findOne({ customerId: req.params.customerId });
@@ -56,18 +57,20 @@ exports.getCartByCustomerId = async (req, res) => {
   }
 };
 
+// Delete cart by customer ID
 exports.deleteCartByCustomerId = async (req, res) => {
-  try {
-    const result = await Cart.deleteOne({ customerId: req.params.customerId });
-    if (result.deletedCount === 0) {
-      return res.status(404).json({ message: 'Cart not found' ,cart:{ addedDate: new Date(), email: '', lineItems: [] }});
+    try {
+      const { deletedCount } = await Cart.deleteOne({ customerId: req.params.customerId });
+      return res.status(deletedCount ? 200 : 404).json({
+        message: deletedCount ? 'Cart deleted' : 'Cart not found',
+        ...(deletedCount ? {} : { cart: getEmptyCart() })
+      });
+    } catch (err) {
+      res.status(500).json({ error: err.message });
     }
-    res.status(200).json({ message: 'Cart deleted' });
-  } catch (err) {
-    res.status(500).json({ error: err.message });
-  }
-};
+  };
 
+// Get all carts (for admin/debug use)
 exports.getAllCarts = async (req, res) => {
   try {
     const carts = await Cart.find();
@@ -77,7 +80,7 @@ exports.getAllCarts = async (req, res) => {
   }
 };
 
-
+// Serve the HTML page (view)
 exports.getPage = async (req,res) =>{
     try{
         res.sendFile(path.join(__dirname, "../view/index.html"));
@@ -86,3 +89,9 @@ exports.getPage = async (req,res) =>{
     }
 }
 
+// Utility: Standard empty cart response
+const getEmptyCart = (email = '') => ({
+    addedDate: new Date(),
+    email,
+    lineItems: []
+  });
